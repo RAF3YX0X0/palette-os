@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Operating System & IDE
+.DS_Store
+Thumbs.db
+*.tmp
+.vscode/
+.idea/
+
+# Agent & IDE workspace internal tools
+.agents/
+.kombai/
+
+# Large temporary scratch videos & nested duplicate folders
+palette-os/
+screen-capture.webm
+*.log

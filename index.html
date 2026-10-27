@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Palette OS — Autonomous Color Space Architecture</title>
+  <meta name="description" content="One platform. Every color outcome. Autonomous OKLCH color engine for digital interfaces. Generate accessible palettes, test live in UI components, and export tokens instantly.">
+  <meta property="og:title" content="Palette OS — One platform. Every color outcome.">
+  <meta property="og:description" content="Coolors makes palettes. Palette OS shows whether they work in real interfaces.">
+  <meta property="og:type" content="website">
+  
+  <link rel="icon" type="image/png" href="assets/palette-os-mark.png">
+
+  <!-- Google Fonts: Instrument Serif + Plus Jakarta Sans + Inter + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="top">
+
+  <!-- Accessible Skip Link -->
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <!-- Color-blindness Simulation SVG Filter Definitions -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="cb-prot"><feColorMatrix type="matrix" values="0.567 0.433 0 0 0 0.558 0.442 0 0 0 0 0.242 0.758 0 0 0 0 0 1 0"/></filter>
+    <filter id="cb-deut"><feColorMatrix type="matrix" values="0.625 0.375 0 0 0 0.7 0.3 0 0 0 0 0.3 0.7 0 0 0 0 0 1 0"/></filter>
+    <filter id="cb-trit"><feColorMatrix type="matrix" values="0.95 0.05 0 0 0 0 0.433 0.567 0 0 0 0.475 0.525 0 0 0 0 0 1 0"/></filter>
+    <filter id="cb-mono"><feColorMatrix type="matrix" values="0.299 0.587 0.114 0 0 0 0.299 0.587 0.114 0 0 0 0 0.299 0.587 0.114 0 0 0 0 0 1 0"/></filter>
+  </svg>
+
+  <!-- ==================== 1. FLOATING NAVIGATION BAR ==================== -->
+  <header class="site-header" id="main-nav">
+    <div class="nav-container">
+      <!-- Left: Dark Capsule with Logo & Status (Matches Exact Inspo) -->
+      <a class="nav-brand-capsule" href="#top" aria-label="Palette OS Home">
+        <img src="assets/palette-os-mark.png" alt="Palette OS Icon" class="nav-logo-mark">
+        <span class="nav-logo-text">Palette OS</span>
+        <span class="nav-brand-menu-icon" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+      </a>
+
+      <!-- Center: Clean Minimal Navigation Links -->
+      <nav class="nav-pill-group" aria-label="Primary Navigation">
+        <a class="nav-pill-link" href="#engine">Engine</a>
+        <a class="nav-pill-link" href="#ui-lab">Living Brand &amp; UI Lab</a>
+        <a class="nav-pill-link" href="#accessibility">WCAG Audit</a>
+        <a class="nav-pill-link" href="#tokens">Tokens</a>
+        <a class="nav-pill-link" href="#pricing">Pricing</a>
+      </nav>
+
+      <!-- Right: Action Pills (Yellow 'Sign In' + Vibrant Coral 'Start for Free') -->
+      <div class="nav-actions">
+        <button class="nav-btn-signin" id="navSignInBtn">Sign In</button>
+        <a class="nav-btn-start" href="#ui-lab" id="navStartBtn">Start for Free</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- ==================== 2. HERO SECTION (EXACT REPLICA OF VIDEO INSPO) ==================== -->
+    <section class="hero-section" id="hero">
+      <!-- Subtle dot matrix canvas overlay -->
+      <div class="hero-dot-grid" aria-hidden="true"></div>
+
+      <!-- Upper Hero Typography: Serif Editorial Headline -->
+      <div class="hero-top-content">
+        <h1 class="hero-title">
+          One platform.<br>
+          Every color outcome.
+        </h1>
+      </div>
+
+      <!-- Center: 3D Revolving Amphitheater Card Carousel Stage (Zero Empty Gap Ribbon) -->
+      <div class="carousel-stage" id="carouselStage" aria-label="3D Interactive Palette Outcomes Carousel" role="region">
+        <div class="carousel-track" id="carouselTrack">
+          <!-- Dynamically populated with 16 continuous seamless cards -->
+        </div>
+      </div>
+
+      <!-- Lower Hero Content: Minimalist Subtitle & Interactive Prompt Bar -->
+      <div class="hero-bottom-content">
+        <p class="hero-subtitle">
+          Be the creative director. Let Palette OS be your color engine.<br>
+          Brief our generative prompt, preview in living UI components, and steer any palette until the outcome lands exactly as you imagined.
+        </p>
+
+        <!-- Interactive Floating Dark Prompt Bar -->
+        <div class="hero-prompt-bar" id="heroPromptBar">
+          <div class="prompt-icon-wrap" aria-hidden="true">
+            <svg class="prompt-sparkle-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z"/>
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            id="palettePromptInput" 
+            class="prompt-input" 
+            value="Design an accessible cyberpunk neon palette for mobile apps" 
+            placeholder="Describe any palette, theme, or interface..."
+            aria-label="Color palette prompt"
+          />
+          <button class="prompt-submit-btn" id="generateFromPromptBtn" aria-label="Generate palette" title="Generate palette (Enter)">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Trust Signals Pill Row -->
+        <div class="hero-trust-signals">
+          <div class="trust-signal-item">
+            <span class="trust-icon star-icon">★</span>
+            <span>OKLCH Calibrated</span>
+          </div>
+          <span class="trust-divider" aria-hidden="true">•</span>
+          <div class="trust-signal-item">
+            <span class="trust-icon shield-icon">✔</span>
+            <span>WCAG AAA Verified</span>
+          </div>
+          <span class="trust-divider" aria-hidden="true">•</span>
+          <div class="trust-signal-item">
+            <span class="trust-icon lightning-icon">⚡</span>
+            <span>Live UI Testing</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. HOW IT WORKS (SELF-EXPLANATORY 3-STEP ARCHITECTURE) ==================== -->
+    <section class="engine-section" id="engine" aria-label="How Palette OS works">
+      <div class="wrap">
+        <div class="section-badge-header center">
+          <span class="mini-pill-badge">HOW IT WORKS</span>
+          <h2 class="serif section-title">Autonomous color precision. <em class="serif-italic">Zero guesswork.</em></h2>
+          <p class="section-sub">Coolors gives you static swatches. Palette OS computes optical physics so colors behave perfectly across real light & dark digital products.</p>
+        </div>
+
+        <div class="engine-steps-grid">
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="step-card-num">01</div>
+            <div class="step-art-preview">
+              <div class="oklch-visual-spectrum">
+                <span class="spectrum-bar sb-1"></span>
+                <span class="spectrum-bar sb-2"></span>
+                <span class="spectrum-bar sb-3"></span>
+                <span class="spectrum-bar sb-4"></span>
+                <span class="spectrum-bar sb-5"></span>
+              </div>
+            </div>
+            <h3 class="step-title">Perceptually Uniform OKLCH</h3>
+            <p class="step-desc">Standard hex color pickers create muddy yellows and blinding blues. Our engine maintains true uniform perceptual lightness across every generated hue.</p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="step-card-num">02</div>
+            <div class="step-art-preview">
+              <div class="contrast-gauge-mini">
+                <div class="gauge-ring">
+                  <span class="gauge-value">7.8:1</span>
+                  <span class="gauge-label">AAA PASS</span>
+                </div>
+              </div>
+            </div>
+            <h3 class="step-title">Real-time WCAG & APCA Guardrails</h3>
+            <p class="step-desc">Every palette pairing is automatically evaluated against WCAG 2.2 and APCA standards. Accessible contrast is guaranteed before writing code.</p>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="step-card-num">03</div>
+            <div class="step-art-preview">
+              <div class="tokens-code-preview">
+                <code>--color-primary: <span class="tok-c1">var(--c1)</span>;</code>
+                <code>--color-accent: <span class="tok-c2">var(--c2)</span>;</code>
+              </div>
+            </div>
+            <h3 class="step-title">One-Click Production Tokens</h3>
+            <p class="step-desc">Export directly into CSS Custom Properties, Tailwind v3/v4 config, Figma Tokens Studio JSON, and SVG swatches with zero manual remapping.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. LIVING BRAND & UI LAB (DETAILED WEBSITE UI + BRANDKIT + SVG BOX) ==================== -->
+    <section class="lab-section" id="ui-lab" aria-label="Living Brand and UI Component Lab">
+      <div class="wrap">
+        <div class="section-badge-header center">
+          <span class="mini-pill-badge">LIVING BRAND &amp; UI STUDIO</span>
+          <h2 class="serif section-title">Real-time interface impact. <em class="serif-italic">Complete brand kit.</em></h2>
+          <p class="section-sub">Swatches lie. Interface context tells the truth. See how your active palette transforms a complete SaaS dashboard, full SVG iconography system, brand personality, and marketing collateral in real time.</p>
+        </div>
+
+        <!-- Master Palette Toolbar with Usage % Bar -->
+        <div class="lab-palette-bar" id="labPaletteBar">
+          <div class="lab-palette-info">
+            <span class="current-palette-label">Active System:</span>
+            <span class="current-palette-name" id="currentPaletteName">Cyber Aurora</span>
+          </div>
+
+          <!-- Swatches Row -->
+          <div class="lab-swatches-row" id="labSwatchesRow">
+            <!-- Dynamically populated swatches -->
+          </div>
+
+          <!-- Color Usage % Bar (From Brandkit Inspo) -->
+          <div class="color-usage-wrapper" title="Color System Usage Distribution">
+            <div class="usage-bar-track">
+              <div class="usage-seg seg-p" style="width: 50%; background: var(--c1);" title="Primary: 50%"></div>
+              <div class="usage-seg seg-s" style="width: 25%; background: var(--c2);" title="Secondary: 25%"></div>
+              <div class="usage-seg seg-a" style="width: 15%; background: var(--c3);" title="Accent: 15%"></div>
+              <div class="usage-seg seg-n" style="width: 10%; background: var(--c5);" title="Neutral: 10%"></div>
+            </div>
+            <div class="usage-labels">
+              <span>50% Primary</span>
+              <span>25% Neutral</span>
+              <span>15% Accent</span>
+              <span>10% Highlight</span>
+            </div>
+          </div>
+
+          <!-- Control buttons -->
+          <div class="lab-controls-group">
+            <button class="lab-ctrl-btn" id="labShuffleBtn" title="Generate New Palette (Spacebar)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 3 21 3 21 8"></polyline>
+                <line x1="4" y1="20" x2="21" y2="3"></line>
+                <polyline points="21 16 21 21 16 21"></polyline>
+                <line x1="15" y1="15" x2="21" y2="21"></line>
+                <line x1="4" y1="4" x2="9" y2="9"></line>
+              </svg>
+              <span>Shuffle</span>
+              <kbd class="key-hint">Space</kbd>
+            </button>
+            <button class="lab-theme-toggle" id="labThemeToggle" aria-label="Toggle lab light/dark theme" title="Toggle Light / Dark Preview">
+              <span class="theme-mode-label">Mode: Light</span>
+              <div class="toggle-switch-track">
+                <div class="toggle-switch-thumb"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Studio Master Grid: Detailed Website UI on Left + Brandkit / SVG Box on Right -->
+        <div class="studio-master-grid">
+          
+          <!-- LEFT COLUMN: Detailed Interactive Web App & Dashboard UI -->
+          <div class="ui-sandbox-canvas" id="uiSandboxCanvas">
+            <!-- Sandbox Header Bar -->
+            <div class="sandbox-window-bar">
+              <div class="window-dots">
+                <span class="w-dot red"></span>
+                <span class="w-dot yellow"></span>
+                <span class="w-dot green"></span>
+              </div>
+              <div class="app-nav-simulation">
+                <span class="app-sim-logo" style="background: var(--c1);"></span>
+                <span class="app-sim-name">Palette Studio Pro</span>
+                <span class="app-sim-link active">Dashboard</span>
+                <span class="app-sim-link">Tokens</span>
+                <span class="app-sim-link">Components</span>
+              </div>
+              <div class="window-status-pill">
+                <span class="pulse-indicator"></span> Live OKLCH Bind
+              </div>
+            </div>
+
+            <!-- Complete Detailed Web App Body -->
+            <div class="sandbox-body-app">
+              
+              <!-- 1. Hero Feature Banner with Dynamic Active Gradients -->
+              <div class="app-hero-banner" style="background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.7) 100%), linear-gradient(135deg, var(--c1) 0%, var(--c2) 100%);">
+                <div class="banner-content">
+                  <div class="banner-badge" style="background: rgba(0,0,0,0.06); color: var(--c1);">
+                    <span>✦ SYSTEM CALIBRATION ACTIVE</span>
+                  </div>
+                  <h3 class="banner-heading">Autonomous Design Tokens in Production</h3>
+                  <p class="banner-sub">Dynamic color tokens mapped across all typography, buttons, chart series, and interactive controls with zero manual CSS tuning.</p>
+                  <div class="banner-actions">
+                    <button class="app-btn-solid" style="background: var(--c1); color: #ffffff;" id="appHeroCta">Explore System</button>
+                    <button class="app-btn-outline" style="border-color: var(--c5); color: var(--c5);">Documentation</button>
+                  </div>
+                </div>
+                <div class="banner-visual-stat">
+                  <div class="radial-stat-circle" style="border-color: var(--c2);">
+                    <span class="stat-number">99.8%</span>
+                    <span class="stat-desc">Gamut Match</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. KPI Metrics Row (3 Detailed Analytics Cards) -->
+              <div class="app-metrics-row">
+                <!-- KPI 1 -->
+                <div class="app-metric-card">
+                  <div class="metric-top">
+                    <span class="metric-title">WCAG 2.2 Contrast</span>
+                    <span class="metric-trend" style="background: rgba(47, 215, 160, 0.15); color: #0d9468;">+4.2 AAA</span>
+                  </div>
+                  <div class="metric-value">11.4:1</div>
+                  <div class="metric-chart-mini">
+                    <svg viewBox="0 0 160 40" preserveAspectRatio="none" class="sparkline-svg">
+                      <path d="M0,35 Q 30,10 60,25 T 120,12 T 160,5" fill="none" stroke="var(--c1)" stroke-width="2.5" stroke-linecap="round"/>
+                      <circle cx="160" cy="5" r="3.5" fill="var(--c1)"/>
+                    </svg>
+                  </div>
+                  <span class="metric-footer">Automated APCA compliance pass</span>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="app-metric-card">
+                  <div class="metric-top">
+                    <span class="metric-title">Perceptual Uniformity</span>
+                    <span class="metric-trend" style="background: rgba(58, 160, 255, 0.15); color: #0284c7;">OKLCH Space</span>
+                  </div>
+                  <div class="metric-value" style="color: var(--c2);">98.6%</div>
+                  <div class="metric-progress-track">
+                    <div class="metric-progress-fill" style="width: 98.6%; background: var(--c2);"></div>
+                  </div>
+                  <span class="metric-footer">Zero hue-dependent lightness shifts</span>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="app-metric-card">
+                  <div class="metric-top">
+                    <span class="metric-title">Active UI Tokens</span>
+                    <span class="metric-trend" style="background: rgba(122, 92, 255, 0.15); color: #7c3aed;">Synced</span>
+                  </div>
+                  <div class="metric-value">54 Tokens</div>
+                  <div class="metric-tag-row">
+                    <span class="mini-tag-pill" style="background: var(--c1); color: #fff;">Primary</span>
+                    <span class="mini-tag-pill" style="background: var(--c3); color: #111;">Accent</span>
+                    <span class="mini-tag-pill" style="background: var(--c5); color: #fff;">Base</span>
+                  </div>
+                  <span class="metric-footer">Export ready for Figma &amp; Tailwind</span>
+                </div>
+              </div>
+
+              <!-- 3. Component Playground & Interactive Primitives -->
+              <div class="app-primitives-grid">
+                <!-- Interactive Action Buttons Stack -->
+                <div class="primitive-box">
+                  <span class="primitive-title">Button Primitives &amp; States</span>
+                  <div class="primitive-buttons-row">
+                    <button class="comp-btn btn-c1" style="background: var(--c1); color: #ffffff;" id="demoBtn1">Primary Action</button>
+                    <button class="comp-btn btn-c2" style="background: var(--c2); color: #111113;" id="demoBtn2">Secondary Spark</button>
+                    <button class="comp-btn btn-c3" style="border: 1.5px solid var(--c5); color: var(--c5); background: transparent;" id="demoBtn3">Ghost Outline</button>
+                    <button class="comp-btn btn-pill-soft" style="background: rgba(0,0,0,0.06); color: var(--c1);">Subtle Pill</button>
+                  </div>
+                </div>
+
+                <!-- Form Controls & Interactive Sliders -->
+                <div class="primitive-box">
+                  <span class="primitive-title">Form Controls &amp; Focus Rings</span>
+                  <div class="primitive-inputs-row">
+                    <div class="input-with-icon">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" class="in-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                      <input type="text" class="comp-input" value="Search tokens..." placeholder="Search system...">
+                    </div>
+                    <label class="comp-toggle-wrap">
+                      <input type="checkbox" checked class="comp-toggle-chk">
+                      <span class="comp-toggle-slider" style="--slider-color: var(--c1);"></span>
+                      <span class="toggle-text">Auto Sync</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: Brandkit System & Dedicated SVG Iconography Box (From Attached Inspo) -->
+          <div class="brandkit-sandbox-panel">
+            
+            <!-- 1. Dedicated SVG Iconography Box (Exact User Request) -->
+            <div class="brand-subcard svg-icon-box">
+              <div class="subcard-header">
+                <div>
+                  <span class="subcard-num">07</span>
+                  <h4 class="subcard-title">Iconography &amp; Vector Glyphs</h4>
+                </div>
+                <span class="subcard-badge">20 Active SVGs</span>
+              </div>
+              <p class="subcard-desc">Optical 24px system icons with reactive dual-tone fills, stroked lines, and hover states tuned to active palette tokens.</p>
+              
+              <!-- 4x5 Grid of Handcrafted SVG Icons -->
+              <div class="svg-icons-grid" id="svgIconsGrid">
+                <!-- 1. Home -->
+                <div class="svg-icon-cell" title="Home Icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
+                  <span>Home</span>
+                </div>
+                <!-- 2. Search -->
+                <div class="svg-icon-cell" title="Search Icon">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <span>Search</span>
+                </div>
+                <!-- 3. Edit / Pen -->
+                <div class="svg-icon-cell" title="Edit Pen">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9"/>
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                  </svg>
+                  <span>Edit</span>
+                </div>
+                <!-- 4. Bell Notifications -->
+                <div class="svg-icon-cell" title="Bell Notification">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                  </svg>
+                  <span>Alerts</span>
+                </div>
+                <!-- 5. Settings / Gear -->
+                <div class="svg-icon-cell" title="Settings Cog">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                  </svg>
+                  <span>Config</span>
+                </div>
+                <!-- 6. Star -->
+                <div class="svg-icon-cell" title="Star Favorite">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>Star</span>
+                </div>
+                <!-- 7. User -->
+                <div class="svg-icon-cell" title="User Account">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <span>User</span>
+                </div>
+                <!-- 8. Mail -->
+                <div class="svg-icon-cell" title="Mail Inbox">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  <span>Mail</span>
+                </div>
+                <!-- 9. Tag -->
+                <div class="svg-icon-cell" title="Tag Label">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                    <line x1="7" y1="7" x2="7.01" y2="7"/>
+                  </svg>
+                  <span>Tags</span>
+                </div>
+                <!-- 10. Checkmark -->
+                <div class="svg-icon-cell" title="Checkmark Success">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                  <span>Success</span>
+                </div>
+                <!-- 11. Link -->
+                <div class="svg-icon-cell" title="Link Chain">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                  </svg>
+                  <span>Link</span>
+                </div>
+                <!-- 12. Calendar -->
+                <div class="svg-icon-cell" title="Calendar Date">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span>Date</span>
+                </div>
+                <!-- 13. Grid -->
+                <div class="svg-icon-cell" title="Layout Grid">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                  </svg>
+                  <span>Grid</span>
+                </div>
+                <!-- 14. Bookmark -->
+                <div class="svg-icon-cell" title="Bookmark">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  <span>Save</span>
+                </div>
+                <!-- 15. Heart -->
+                <div class="svg-icon-cell" title="Heart Favorite">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                  <span>Love</span>
+                </div>
+                <!-- 16. Message -->
+                <div class="svg-icon-cell" title="Chat Message">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                  </svg>
+                  <span>Chat</span>
+                </div>
+                <!-- 17. Sparkles -->
+                <div class="svg-icon-cell" title="AI Sparkles">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                  </svg>
+                  <span>Magic</span>
+                </div>
+                <!-- 18. Sliders -->
+                <div class="svg-icon-cell" title="Tuning Sliders">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="21" x2="4" y2="14"/>
+                    <line x1="4" y1="10" x2="4" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12" y2="3"/>
+                    <line x1="20" y1="21" x2="20" y2="16"/>
+                    <line x1="20" y1="12" x2="20" y2="3"/>
+                    <line x1="1" y1="14" x2="7" y2="14"/>
+                    <line x1="9" y1="8" x2="15" y2="8"/>
+                    <line x1="17" y1="16" x2="23" y2="16"/>
+                  </svg>
+                  <span>Tune</span>
+                </div>
+                <!-- 19. Shield -->
+                <div class="svg-icon-cell" title="Shield Security">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                  <span>Shield</span>
+                </div>
+                <!-- 20. Cloud -->
+                <div class="svg-icon-cell" title="Cloud Sync">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
+                  </svg>
+                  <span>Cloud</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Logo System & Clearspace Specimen (From Inspo) -->
+            <div class="brand-subcard logo-spec-card">
+              <div class="subcard-header">
+                <div>
+                  <span class="subcard-num">02</span>
+                  <h4 class="subcard-title">Logo &amp; Brand Marks</h4>
+                </div>
+              </div>
+              <div class="logo-variants-row">
+                <!-- Light Variant -->
+                <div class="logo-var-tile tile-light">
+                  <img src="assets/palette-os-mark.png" alt="Light logo mark" class="tile-logo-img">
+                  <span>Light Variant</span>
+                </div>
+                <!-- Dark Variant -->
+                <div class="logo-var-tile tile-dark">
+                  <img src="assets/palette-os-mark.png" alt="Dark logo mark" class="tile-logo-img">
+                  <span>Dark Variant</span>
+                </div>
+                <!-- Primary Tint Variant -->
+                <div class="logo-var-tile tile-tint" style="background: var(--c1); color: #ffffff;">
+                  <img src="assets/palette-os-mark.png" alt="Tinted logo mark" class="tile-logo-img filter-white">
+                  <span>Primary Tint</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Brand Personality & Rationale (From Inspo) -->
+            <div class="brand-subcard rationale-card">
+              <div class="subcard-header">
+                <div>
+                  <span class="subcard-num">04</span>
+                  <h4 class="subcard-title">Color Rationale &amp; Voice</h4>
+                </div>
+              </div>
+              <div class="personality-chips-row">
+                <span class="p-chip" style="background: rgba(0,0,0,0.06); color: var(--c1);">Creative</span>
+                <span class="p-chip" style="background: rgba(0,0,0,0.06); color: var(--c2);">Confident</span>
+                <span class="p-chip" style="background: rgba(0,0,0,0.06); color: var(--c3);">Accessible</span>
+                <span class="p-chip" style="background: rgba(0,0,0,0.06); color: var(--c5);">Modern</span>
+              </div>
+              <p class="rationale-text">
+                Primary color serves as the core conversion anchor. Secondary highlights callouts and active state transitions, while calibrated OKLCH neutral surfaces ensure effortless readability.
+              </p>
+            </div>
+
+            <!-- 4. Marketing & Social Post Card Preview (From Inspo) -->
+            <div class="brand-subcard social-preview-card" style="background: linear-gradient(135deg, var(--c5) 0%, #0d0c15 100%);">
+              <div class="social-header">
+                <span class="social-brand-tag" style="background: var(--c1); color: #fff;">Palette OS Brand</span>
+                <span class="social-date">09 • Social Template</span>
+              </div>
+              <h5 class="social-quote">"Great design isn't just how it looks, it's how colors behave in real interfaces."</h5>
+              <div class="social-author-row">
+                <div class="social-avatar" style="background: var(--c2); color: #111;">PO</div>
+                <div class="social-meta">
+                  <span class="social-name">Autonomous Color OS</span>
+                  <span class="social-handle">@paletteos.design</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. MINIMAL SPECS & WCAG AUDIT ==================== -->
+    <section class="specs-section" id="accessibility" aria-label="Accessibility verification">
+      <div class="wrap">
+        <div class="section-badge-header center">
+          <span class="mini-pill-badge">ACCESSIBILITY ENGINE</span>
+          <h2 class="serif section-title">Real-time contrast &amp; vision simulation.</h2>
+          <p class="section-sub">Test pairings against WCAG 2.2 AAA ratios and toggle instant color-blindness simulation shaders.</p>
+        </div>
+
+        <div class="specs-grid">
+          <!-- Accessibility Contrast Audit Box -->
+          <div class="spec-card">
+            <div class="spec-card-head">
+              <h3>Contrast Compliance Matrix</h3>
+              <div class="vision-filters-pill" id="visionFilters" role="tablist" aria-label="Vision filters">
+                <button class="v-btn active" data-filter="none">Normal</button>
+                <button class="v-btn" data-filter="cb-prot">Protanopia</button>
+                <button class="v-btn" data-filter="cb-deut">Deuteranopia</button>
+                <button class="v-btn" data-filter="cb-trit">Tritanopia</button>
+              </div>
+            </div>
+            <div class="contrast-swatches" id="contrastSwatches">
+              <!-- Dynamically rendered contrast pairings -->
+            </div>
+          </div>
+
+          <!-- Code Token Exporter -->
+          <div class="spec-card code-spec-card" id="tokens">
+            <div class="spec-card-head">
+              <h3>Production Token Handoff</h3>
+              <div class="code-tabs" id="codeFormatTabs">
+                <button class="c-tab active" data-lang="css">CSS</button>
+                <button class="c-tab" data-lang="tailwind">Tailwind</button>
+                <button class="c-tab" data-lang="figma">Figma Tokens</button>
+                <button class="c-tab" data-lang="json">JSON</button>
+              </div>
+            </div>
+            <div class="code-editor-box">
+              <pre><code id="tokenCodeBlock">/* generating production tokens... */</code></pre>
+              <button class="copy-code-btn" id="copyTokenBtn">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2"/>
+                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                </svg>
+                <span>Copy Code</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. PRICING: REFERENCE CARD & 2x2 TILES ==================== -->
+    <section class="pricing-section center" id="pricing" aria-label="Pricing plans">
+      <div class="wrap">
+        <div class="section-badge-header center">
+          <span class="mini-pill-badge">INVESTMENT</span>
+          <h2 class="serif pricing-headline">Pick your Plan</h2>
+          <p class="section-sub">Autonomous color engineering for solitary designers and global design systems teams.</p>
+        </div>
+
+        <div class="pricing-shell">
+          <!-- Segmented Tab Switcher -->
+          <div class="plan-tabs" role="tablist" id="planSwitcher">
+            <button class="plan-tab" role="tab" aria-selected="false" data-plan="free">Free Plan</button>
+            <button class="plan-tab active" role="tab" aria-selected="true" data-plan="pro">Pro Plan</button>
+            <button class="plan-tab" role="tab" aria-selected="false" data-plan="enterprise">Enterprise</button>
+          </div>
+
+          <!-- Main Hero Upgrade Card -->
+          <div class="pro-upgrade-card" id="mainPricingHero">
+            <div class="pro-card-content">
+              <h3 class="upgrade-heading" id="pricingTierName">Upgrade to Pro</h3>
+              <div class="upgrade-price" id="pricingTierPrice">$79<span class="per-period">/month</span></div>
+
+              <ul class="upgrade-perks" id="pricingTierPerks">
+                <li><span class="perk-check">✔</span> Autonomous OKLCH space engine</li>
+                <li><span class="perk-check">✔</span> Unlimited live UI component testing</li>
+                <li><span class="perk-check">✔</span> Automated WCAG 2.2 AAA & APCA audits</li>
+                <li><span class="perk-check">✔</span> 1-click Tailwind, Figma, and CSS handoff</li>
+              </ul>
+
+              <button class="btn btn-dark upgrade-cta" id="pricingCtaBtn">Get Started with Pro</button>
+            </div>
+
+            <div class="pro-card-art">
+              <img src="assets/pricing_pro.jpg" alt="3D Iridescent Fluid Wave" class="fluid-art-img" loading="lazy">
+            </div>
+          </div>
+
+          <!-- 2x2 Feature Grid -->
+          <div class="features-2x2-grid">
+            <!-- Tile 1: Pink Silk Fluid -->
+            <div class="feature-tile">
+              <div class="tile-image-wrapper">
+                <img src="assets/pricing_pink.jpg" alt="Pink silk fluid waves" class="tile-art-img" loading="lazy">
+              </div>
+              <p class="tile-caption">Unlimited Real-time Token Syncing across design files.</p>
+            </div>
+
+            <!-- Tile 2: Lavender Droplet -->
+            <div class="feature-tile">
+              <div class="tile-image-wrapper">
+                <img src="assets/pricing_drop.jpg" alt="Lavender ripple droplet" class="tile-art-img" loading="lazy">
+              </div>
+              <p class="tile-caption">Live APCA & WCAG contrast audit engine.</p>
+            </div>
+
+            <!-- Tile 3: Lime Green Silk -->
+            <div class="feature-tile">
+              <div class="tile-image-wrapper">
+                <img src="assets/pricing_lime.jpg" alt="Lime green silky cloth" class="tile-art-img" loading="lazy">
+              </div>
+              <p class="tile-caption">Full access to perceptual OKLCH color spaces.</p>
+            </div>
+
+            <!-- Tile 4: Electric Blue Spheres -->
+            <div class="feature-tile">
+              <div class="tile-image-wrapper">
+                <img src="assets/pricing_spheres.jpg" alt="Electric blue floating glass spheres" class="tile-art-img" loading="lazy">
+              </div>
+              <p class="tile-caption">Automated Figma Tokens Studio and code exports.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 7. FINAL CALL TO ACTION ==================== -->
+    <section class="final-cta-section center">
+      <div class="wrap">
+        <h2 class="serif final-cta-title">Make your palette <em class="serif-italic">prove itself.</em></h2>
+        <p class="final-cta-sub">Start designing accessible, cohesive digital interfaces with Palette OS today.</p>
+        <div class="cta-row center">
+          <a class="btn btn-dark btn-large" href="#hero">
+            <span>Launch Generator</span>
+            <span class="sparkle-icon">✦</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== 8. FOOTER WITH RAINBOW HILLS & BOLD FAT PALETTE OS WORDMARK ==================== -->
+  <footer class="site-footer">
+    <!-- Top Footer Section (Inspired by Attached Image) -->
+    <div class="wrap footer-content">
+      <div class="footer-top-grid">
+        <!-- Left Brand & Social Info -->
+        <div class="footer-brand-col">
+          <a class="footer-brand-lockup" href="#top">
+            <img src="assets/palette-os-mark.png" alt="Palette OS Icon" class="footer-logo-mark">
+            <span class="footer-brand-title">Palette OS</span>
+          </a>
+          <p class="footer-tagline">
+            Join thousands of designers and product teams already using Palette OS to simplify their color workflow.
+          </p>
+          <div class="footer-social-icons">
+            <a href="#" class="social-sq-btn" aria-label="Twitter / X">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="#" class="social-sq-btn" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="social-sq-btn" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" class="social-sq-btn" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Navigation Links Columns -->
+        <div class="footer-links-wrapper">
+          <div class="footer-col">
+            <span class="col-head">Product</span>
+            <ul>
+              <li><a href="#hero">Features</a></li>
+              <li><a href="#ui-lab">Integrations</a></li>
+              <li><a href="#pricing">Pricing</a></li>
+              <li><a href="#tokens">Changelog</a></li>
+              <li><a href="#engine">Roadmap</a></li>
+              <li><a href="#accessibility">Security</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <span class="col-head">Company</span>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Careers</a></li>
+              <li><a href="#">Press Kit</a></li>
+              <li><a href="#">Partners</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <span class="col-head">Resources</span>
+            <ul>
+              <li><a href="#">Blogs</a></li>
+              <li><a href="#">Documentation</a></li>
+              <li><a href="#">API Reference</a></li>
+              <li><a href="#">Help Center</a></li>
+              <li><a href="#">Community</a></li>
+              <li><a href="#">Tutorials</a></li>
+              <li><a href="#">Webinars</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <span class="col-head">Legal</span>
+            <ul>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Cookie Policy</a></li>
+              <li><a href="#">Compliance</a></li>
+              <li><a href="#">Sitemap</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Copyright Sub-bar -->
+      <div class="footer-middle-bar">
+        <span class="copyright-text">© 2026 Palette OS, Inc. All rights reserved.</span>
+        <span class="studio-credit">Made with <span class="heart-icon">♥</span> for designers worldwide</span>
+      </div>
+    </div>
+
+    <!-- The User Provided Rainbow Hills Landscape Image (Replaces previous hill) -->
+    <div class="footer-hills-stage" aria-label="Scenic Rainbow Hills Landscape">
+      <img src="assets/footer_rainbow_hills.jpg" alt="Vibrant rolling rainbow hills with cypress trees and river" class="footer-hills-img" loading="lazy">
+    </div>
+
+    <!-- Black Bold Fat Font 'PALETTE OS' at Very Bottom from Left to Right -->
+    <div class="footer-bottom-mega">
+      <div class="footer-fat-brand">PALETTE OS</div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast-popup" id="toastNotification" role="alert" aria-live="polite">
+    <span class="toast-dot"></span>
+    <span class="toast-message" id="toastMessage">Hex code copied to clipboard</span>
+  </div>
+
+  <!-- Audio Chimes & Engine -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "palette-os",
+  "version": "1.0.0",
+  "description": "Palette OS — Autonomous Color Space Architecture & Living UI Design System Engine",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "palette-os",
+    "color-space",
+    "oklch",
+    "design-systems",
+    "accessibility",
+    "wcag",
+    "apca"
+  ],
+  "author": "RAF3YX0X0",
+  "license": "MIT"
+}
